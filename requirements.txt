@@ -1,0 +1,4 @@
+Kivy~=1.11.0
+numpy~=1.16.6
+fastdtw~=0.3.4
+scipy~=1.2.3
