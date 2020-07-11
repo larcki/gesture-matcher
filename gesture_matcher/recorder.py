@@ -2,6 +2,7 @@ from threading import Thread
 
 from gesture_matcher import similarity
 from leap import Leap
+from leap.Leap import Vector
 
 
 class Recorder:
@@ -22,7 +23,7 @@ class Recorder:
 
     def stop_matching(self):
         self.match_control.stop()
-        self.similarity = similarity.calculate(self.tracking_control.saved_data, self.match_control.saved_data)
+        self.similarity = similarity.calculate_2(self.tracking_control.saved_data, self.match_control.saved_data)
 
 
 class TrackingControl:
@@ -52,6 +53,18 @@ class TrackingControl:
         print 'Tracking stopped'
 
 
+class GestureFrame:
+
+    def __init__(self, thumb=Vector(), index=Vector(), middle=Vector(), ring=Vector(), pinky=Vector(), palm=Vector(), palm_position=Vector()):
+        self.thumb = thumb
+        self.index = index
+        self.middle = middle
+        self.ring = ring
+        self.pinky = pinky
+        self.palm = palm
+        self.palm_direction = palm_position
+
+
 class GestureListener(Leap.Listener):
 
     def __init__(self):
@@ -66,7 +79,20 @@ class GestureListener(Leap.Listener):
 
     def on_frame(self, controller):
         frame = controller.frame()
+
+        fingers = frame.fingers
+        gesture_frame = GestureFrame()
+        if fingers:
+            gesture_frame.thumb = fingers[0].tip_position
+            gesture_frame.index = fingers[1].tip_position
+            gesture_frame.middle = fingers[2].tip_position
+            gesture_frame.ring = fingers[3].tip_position
+            gesture_frame.pinky = fingers[4].tip_position
+
         right_hand = frame.hands.rightmost
+        direction = right_hand.palm_normal
         position = right_hand.palm_position
-        self.data.append(position)
+        gesture_frame.palm = position
+        gesture_frame.palm_direction = direction
         print position
+        self.data.append(gesture_frame)

@@ -3,6 +3,18 @@ from fastdtw import fastdtw
 from scipy.spatial.distance import cosine
 
 
+def calculate_2(data_1, data_2):
+    thumn = map(lambda frame: frame.thumb, data_1)
+    thumb_s = calculate(thumn, map(lambda frame: frame.thumb, data_2))
+    index_s = calculate(map(lambda frame: frame.index, data_1), map(lambda frame: frame.index, data_2))
+    middle_s = calculate(map(lambda frame: frame.middle, data_1), map(lambda frame: frame.middle, data_2))
+    ring_s = calculate(map(lambda frame: frame.ring, data_1), map(lambda frame: frame.ring, data_2))
+    pinky_s = calculate(map(lambda frame: frame.pinky, data_1), map(lambda frame: frame.pinky, data_2))
+    palm = calculate(map(lambda frame: frame.palm, data_1), map(lambda frame: frame.palm, data_2))
+    palm_direction = calculate(map(lambda frame: frame.palm_direction, data_1), map(lambda frame: frame.palm_direction, data_2))
+    print thumb_s, index_s, middle_s, ring_s, pinky_s, palm, palm_direction
+    return palm_direction
+
 def calculate(data_1, data_2):
     r1 = to_tuple(normalize(data_1))
     r2 = to_tuple(normalize(data_2))
