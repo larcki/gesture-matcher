@@ -1,0 +1,35 @@
+<MainGrid>
+    record_text: record_text
+    match_text: match_text
+
+    GridLayout:
+        cols:1
+        rows:2
+        size: root.width, root.height
+
+        Label:
+            size_hint_y:0.2
+            font_size:'32sp'
+            text: "Gesture matcher"
+
+        GridLayout:
+            cols:2
+            rows:2
+            padding: 50,50,0,50
+            spacing: 20
+
+            Button:
+                text:'Record'
+                on_press: root.on_record_button_click()
+
+            Label:
+                id:record_text
+                text:''
+
+            Button:
+                text:'Match'
+                on_press: root.on_match_button_click()
+
+            Label:
+                id:match_text
+                text:''

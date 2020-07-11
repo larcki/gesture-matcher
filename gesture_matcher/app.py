@@ -1,51 +1,73 @@
 import kivy
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
+from kivy.clock import Clock
+from kivy.properties import ObjectProperty
+from kivy.uix.widget import Widget
 
+from gesture_matcher.countdown import countdown
 from gesture_matcher.recorder import Recorder
 
 kivy.require('1.11.0')
 
 
+class MainGrid(Widget):
+    record_text = ObjectProperty(None)
+    match_text = ObjectProperty(None)
+    recorder = Recorder()
+
+    def on_record_button_click(self):
+        self.record_text.text = 'Get ready... 3'
+        Clock.schedule_interval(self.get_ready_countdown, 1)
+
+    def on_match_button_click(self):
+        self.match_text.text = 'Get ready... 3'
+        Clock.schedule_interval(self.match_get_ready_countdown, 1)
+
+    def get_ready_countdown(self, instance):
+        return countdown(
+            self.record_text,
+            self.schedule_recording_countdown,
+            lambda: 'Recording... 5',
+            'Get ready... '
+        )
+
+    def match_get_ready_countdown(self, instance):
+        return countdown(
+            self.match_text,
+            self.schedule_matching_countdown,
+            lambda: 'Recording... 5',
+            'Get ready... '
+        )
+
+    def schedule_recording_countdown(self):
+        self.recorder.start_recording()
+        Clock.schedule_interval(self.recording_countdown, 1)
+
+    def schedule_matching_countdown(self):
+        self.recorder.start_matching()
+        Clock.schedule_interval(self.matching_countdown, 1)
+
+    def recording_countdown(self, instance):
+        return countdown(
+            self.record_text,
+            self.recorder.stop_recording,
+            lambda: 'Saved',
+            'Recording... '
+        )
+
+    def matching_countdown(self, instance):
+        return countdown(
+            self.match_text,
+            self.recorder.stop_matching,
+            lambda: str(self.recorder.similarity),
+            'Recording... '
+        )
+
+
 class GestureMatcherApp(App):
 
     def build(self):
-        recorder = Recorder()
-
-        def record(instance):
-            recorder.start_recording()
-
-        def stop(instance):
-            recorder.stop_recording()
-
-        def match(instance):
-            recorder.start_matching()
-
-        def stop_match(instance):
-            recorder.stop_matching()
-
-        layout = BoxLayout(size_hint=(1, None), height=50)
-        startButton = Button(text='Start', on_press=record)
-        stopButton = Button(text='Stop', on_press=stop)
-        layout.add_widget(startButton)
-        layout.add_widget(stopButton)
-
-        layout2 = BoxLayout(size_hint=(1, None), height=50)
-        layout2.add_widget(Label(text='Record gesture'))
-
-        layout3 = BoxLayout(size_hint=(1, None), height=50)
-        layout3.add_widget(Label(text='Test match'))
-        layout3.add_widget(Button(text='Start', on_press=match))
-        layout3.add_widget(Button(text='Stop', on_press=stop_match))
-        root = BoxLayout(orientation='vertical')
-        root.add_widget(layout2)
-        root.add_widget(layout)
-        root.add_widget(BoxLayout(size_hint=(1, None), height=100))
-        root.add_widget(layout3)
-
-        return root
+        return MainGrid()
 
 
 if __name__ == '__main__':

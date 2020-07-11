@@ -22,7 +22,7 @@ class Recorder:
 
     def stop_matching(self):
         self.match_control.stop()
-        self.similarity = similarity.calculate(self.tracking_control.saved_data, self.tracking_control.saved_data)
+        self.similarity = similarity.calculate(self.tracking_control.saved_data, self.match_control.saved_data)
 
 
 class TrackingControl:
