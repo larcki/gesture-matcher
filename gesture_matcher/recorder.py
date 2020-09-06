@@ -23,7 +23,7 @@ class Recorder:
 
     def stop_matching(self):
         self.match_control.stop()
-        self.similarity = similarity.calculate_2(self.tracking_control.saved_data, self.match_control.saved_data)
+        self.similarity = similarity.calculate(self.tracking_control.saved_data, self.match_control.saved_data)
 
 
 class TrackingControl:
@@ -42,6 +42,7 @@ class TrackingControl:
     def stop(self):
         self.keep_tracking = False
         self.saved_data = self.listener.data
+        self.listener.data = []
 
     def track(self):
         self.listener.data = []
@@ -55,14 +56,14 @@ class TrackingControl:
 
 class GestureFrame:
 
-    def __init__(self, thumb=Vector(), index=Vector(), middle=Vector(), ring=Vector(), pinky=Vector(), palm=Vector(), palm_position=Vector()):
-        self.thumb = thumb
-        self.index = index
-        self.middle = middle
-        self.ring = ring
-        self.pinky = pinky
-        self.palm = palm
-        self.palm_direction = palm_position
+    def __init__(self):
+        self.thumb = Vector()
+        self.index = Vector()
+        self.middle = Vector()
+        self.ring = Vector()
+        self.pinky = Vector()
+        self.palm = Vector()
+        self.palm_direction = Vector()
 
 
 class GestureListener(Leap.Listener):
