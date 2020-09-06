@@ -9,7 +9,7 @@
 
         Label:
             size_hint_y:0.2
-            font_size:'32sp'
+            font_size:'38sp'
             text: "Gesture matcher"
 
         GridLayout:
@@ -20,16 +20,20 @@
 
             Button:
                 text:'Record'
+                font_size:'32sp'
                 on_press: root.on_record_button_click()
 
             Label:
                 id:record_text
+                font_size:'32sp'
                 text:''
 
             Button:
                 text:'Match'
+                font_size:'32sp'
                 on_press: root.on_match_button_click()
 
             Label:
                 id:match_text
+                font_size:'32sp'
                 text:''
