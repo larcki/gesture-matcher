@@ -5,4 +5,4 @@ The application records the data as an array of 3-dimensional points of each fin
 
 ### Demo
 
-{% include googleDrivePlayer.html id="1EFDtu2pgmkPXtMf_Q3PG70HlpGAu7Fup/view" %}
+{% include googleDrivePlayer.html id="1EFDtu2pgmkPXtMf_Q3PG70HlpGAu7Fup/preview" %}
